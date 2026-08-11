@@ -18,7 +18,7 @@ package io.microsphere.nacos.client.discovery.spring.cloud;
 
 import org.springframework.cloud.context.named.NamedContextFactory;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.PropertySource;
 
@@ -44,8 +44,8 @@ public class NacosDiscoveryContextFactory extends NamedContextFactory<NacosDisco
     }
 
     @Override
-    public GenericApplicationContext buildContext(String name) {
-        GenericApplicationContext context = super.buildContext(name);
+    public AnnotationConfigApplicationContext createContext(String name) {
+        AnnotationConfigApplicationContext context = super.createContext(name);
         PropertySource nacosClientPropertySource = getNacosCilentPropertySource(this.parentContext.getEnvironment(), name);
         ConfigurableEnvironment environment = context.getEnvironment();
         environment.getPropertySources().addAfter(NACOS_DISCOVERY_PROPERTY_NAME, nacosClientPropertySource);

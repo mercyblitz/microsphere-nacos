@@ -24,6 +24,7 @@ import org.junit.jupiter.api.BeforeEach;
 import java.util.concurrent.TimeUnit;
 
 import static java.lang.String.format;
+import static java.lang.System.getenv;
 
 /**
  * Abstract Test class for Open API
@@ -41,6 +42,8 @@ public abstract class OpenApiTest {
 
     protected static final String SERVER_ADDRESS_PROPERTY_NAME = "SERVER_ADDRESS";
 
+    protected static final String DEFAULT_SERVER_ADDRESS = "localhost:8848";
+
     protected static final String USER_NAME = "nacos";
 
     protected static final String PASSWORD = "nacos";
@@ -51,7 +54,8 @@ public abstract class OpenApiTest {
 
     static String getServerAddress() {
         String key = SERVER_ADDRESS_PROPERTY_NAME;
-        return System.getProperty(key, System.getenv(key));
+        String serverAddress = System.getProperty(key, getenv(key));
+        return serverAddress == null ? DEFAULT_SERVER_ADDRESS : serverAddress;
     }
 
     @BeforeEach
