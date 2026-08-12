@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import static io.microsphere.nacos.client.util.CollectionUtils.size;
+import static io.microsphere.collection.CollectionUtils.size;
 import static java.beans.Introspector.decapitalize;
 import static java.beans.Introspector.getBeanInfo;
 import static java.util.Arrays.asList;

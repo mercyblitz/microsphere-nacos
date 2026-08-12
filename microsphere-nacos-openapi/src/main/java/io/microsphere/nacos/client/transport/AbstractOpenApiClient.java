@@ -16,6 +16,7 @@
  */
 package io.microsphere.nacos.client.transport;
 
+import io.microsphere.io.IOUtils;
 import io.microsphere.nacos.client.ErrorCode;
 import io.microsphere.nacos.client.NacosClientConfig;
 import io.microsphere.nacos.client.common.model.Result;
@@ -29,9 +30,8 @@ import static io.microsphere.nacos.client.ErrorCode.CLIENT_ERROR;
 import static io.microsphere.nacos.client.ErrorCode.DESERIALIZATION_ERROR;
 import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.from;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.ACCESS_TOKEN;
-import static io.microsphere.nacos.client.util.IOUtils.readAsString;
-import static io.microsphere.nacos.client.util.StringUtils.isBlank;
-import static java.lang.String.format;
+import static io.microsphere.text.FormatUtils.format;
+import static io.microsphere.util.StringUtils.isBlank;
 
 /**
  * The Abstract {@link OpenApiClient}
@@ -86,9 +86,9 @@ public abstract class AbstractOpenApiClient implements OpenApiClient {
 
             String statusMessage = response.getStatusMessage();
             code = statusCode;
-            errorMessge = isBlank(statusMessage) ? readAsString(response.getContent(), getEncoding()) : statusMessage;
+            errorMessge = isBlank(statusMessage) ? IOUtils.toString(response.getContent(), getEncoding()) : statusMessage;
         } catch (DeserializationException e) {
-            String errorMessage = format("The payload[%s] can't be deserialized", payloadType);
+            String errorMessage = format("The payload[{}] can't be deserialized", payloadType);
             throw new OpenApiClientException(DESERIALIZATION_ERROR, errorMessage, e);
         } catch (Throwable e) {
             throw new OpenApiClientException(CLIENT_ERROR, e.getMessage(), e);
@@ -96,7 +96,7 @@ public abstract class AbstractOpenApiClient implements OpenApiClient {
 
         ErrorCode errorCode = ErrorCode.valueOf(code);
         errorMessge = isBlank(errorMessge) ? errorCode.getMessage() : errorMessge;
-        String errorMessage = format("The Open API request[%s] is invalid , response status[code : %d , message : %s]",
+        String errorMessage = format("The Open API request[{}] is invalid , response status[code : {} , message :{}]",
                 request, code, errorMessge);
         throw new OpenApiClientException(errorCode, errorMessage);
     }

@@ -22,7 +22,7 @@ import io.microsphere.nacos.client.constants.Constants;
 
 import static io.microsphere.nacos.client.constants.Constants.LISTENING_CONFIG_FIELD_SEPARATOR_CHAR;
 import static io.microsphere.nacos.client.constants.Constants.LISTENING_CONFIG_SEPARATOR_CHAR;
-import static io.microsphere.nacos.client.util.IOUtils.encode;
+import static io.microsphere.net.URLUtils.encode;
 
 /**
  * The Utility class for Nacos Configuration

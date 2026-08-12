@@ -1,16 +1,29 @@
 services:
-  nacos:
-    image: nacos/nacos-server:v2.5.3
-    container_name: nacos-standalone
+  nacos-server-v1:
+    image: nacos/nacos-server:v1.4.7
+    container_name: nacos-server-v1-standalone
     environment:
-      - PREFER_HOST_MODE=hostname
       - MODE=standalone
+      - PREFER_HOST_MODE=hostname
+      - NACOS_AUTH_ENABLE=true
       - NACOS_AUTH_IDENTITY_KEY=nacos
       - NACOS_AUTH_IDENTITY_VALUE=nacos
       - NACOS_AUTH_TOKEN=VGhpc0lzTXlDdXN0b21TZWNyZXRLZXkwMTIzNDU2Nzg=
-    volumes:
-      - ./standalone-logs/:/home/nacos/logs
     ports:
-      - "8080:8080"
-      - "8848:8848"
-      - "9848:9848"
+      - "18080:8080"
+      - "18848:8848"
+      - "19848:9848"
+  nacos-server-v2:
+    image: nacos/nacos-server:v2.5.3
+    container_name: nacos-server-v2-standalone
+    environment:
+      - MODE=standalone
+      - PREFER_HOST_MODE=hostname
+      - NACOS_AUTH_ENABLE=true
+      - NACOS_AUTH_IDENTITY_KEY=nacos
+      - NACOS_AUTH_IDENTITY_VALUE=nacos
+      - NACOS_AUTH_TOKEN=VGhpc0lzTXlDdXN0b21TZWNyZXRLZXkwMTIzNDU2Nzg=
+    ports:
+      - "28080:8080"
+      - "28848:8848"
+      - "29848:9848"

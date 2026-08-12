@@ -19,11 +19,13 @@ package io.microsphere.nacos.client.transport;
 import io.microsphere.nacos.client.common.model.Result;
 import io.microsphere.nacos.client.io.Deserializer;
 import io.microsphere.nacos.client.io.Serializer;
+import io.microsphere.reflect.generics.ParameterizedTypeImpl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import static io.microsphere.nacos.client.util.TypeUtils.ofParameterizedType;
+import static io.microsphere.reflect.JavaType.from;
+import static io.microsphere.reflect.generics.ParameterizedTypeImpl.of;
 
 /**
  * The Nacos Client for Open API
@@ -68,7 +70,7 @@ public interface OpenApiClient extends AutoCloseable {
      * @throws OpenApiClientException
      */
     default <T> T executeAsResult(OpenApiRequest request, Type dataType) throws OpenApiClientException {
-        ParameterizedType payloadType = ofParameterizedType(Result.class, dataType);
+        ParameterizedType payloadType = of(Result.class, dataType);
         return execute(request, payloadType);
     }
 

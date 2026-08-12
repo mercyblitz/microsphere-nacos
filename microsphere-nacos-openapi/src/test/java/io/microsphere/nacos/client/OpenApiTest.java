@@ -21,10 +21,10 @@ import io.microsphere.nacos.client.transport.OpenApiHttpClient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
-import java.util.concurrent.TimeUnit;
-
+import static io.microsphere.lang.function.ThrowableAction.execute;
 import static java.lang.String.format;
 import static java.lang.System.getenv;
+import static java.lang.Thread.sleep;
 
 /**
  * Abstract Test class for Open API
@@ -42,7 +42,9 @@ public abstract class OpenApiTest {
 
     protected static final String SERVER_ADDRESS_PROPERTY_NAME = "SERVER_ADDRESS";
 
-    protected static final String DEFAULT_SERVER_ADDRESS = "localhost:8848";
+    protected static final String NACOS_V1_SERVER_ADDRESS = "localhost:18848";
+
+    protected static final String NACOS_V2_SERVER_ADDRESS = "localhost:28848";
 
     protected static final String USER_NAME = "nacos";
 
@@ -52,14 +54,22 @@ public abstract class OpenApiTest {
 
     protected NacosClientConfig nacosClientConfig;
 
-    static String getServerAddress() {
+    String getServerAddress() {
         String key = SERVER_ADDRESS_PROPERTY_NAME;
         String serverAddress = System.getProperty(key, getenv(key));
-        return serverAddress == null ? DEFAULT_SERVER_ADDRESS : serverAddress;
+        if (serverAddress == null) {
+            String testClassName = this.getClass().getName();
+            if (testClassName.contains(".v2.")) {
+                serverAddress = NACOS_V2_SERVER_ADDRESS;
+            } else {
+                serverAddress = NACOS_V1_SERVER_ADDRESS;
+            }
+        }
+        return serverAddress;
     }
 
     @BeforeEach
-    public void init() {
+    void init() {
         String serverAddress = getServerAddress();
         if (serverAddress == null) {
             String errorMessage = format("The Java System Property[ name : '%s' ] for Nacos Server must be set!", SERVER_ADDRESS_PROPERTY_NAME);
@@ -67,6 +77,8 @@ public abstract class OpenApiTest {
         }
         NacosClientConfig config = new NacosClientConfig();
         config.setServerAddress(serverAddress);
+        config.setUserName(USER_NAME);
+        config.setPassword(PASSWORD);
         customize(config);
         this.openApiClient = new OpenApiHttpClient(config);
         this.nacosClientConfig = config;
@@ -85,13 +97,8 @@ public abstract class OpenApiTest {
     protected void setup() {
     }
 
-    protected void await(long waitTimeInSeconds) {
-        long waitTime = TimeUnit.SECONDS.toMillis(waitTimeInSeconds);
-        try {
-            Thread.sleep(waitTime);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    protected void await(long waitTimeInMillis) {
+        execute(() -> sleep(waitTimeInMillis));
     }
 
     @AfterEach

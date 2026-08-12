@@ -16,6 +16,7 @@
  */
 package io.microsphere.nacos.client.io;
 
+import io.microsphere.io.IOUtils;
 import io.microsphere.nacos.client.constants.Constants;
 import io.microsphere.nacos.client.transport.OpenApiClient;
 
@@ -24,7 +25,6 @@ import java.io.InputStream;
 import java.lang.reflect.Type;
 
 import static io.microsphere.nacos.client.constants.Constants.ENCODING;
-import static io.microsphere.nacos.client.util.IOUtils.readAsString;
 
 /**
  * The Deserializer interface
@@ -47,7 +47,7 @@ public interface Deserializer {
     default <T> T deserialize(InputStream inputStream, Type deserializedType) throws DeserializationException {
         String content = null;
         try {
-            content = readAsString(inputStream, getEncoding());
+            content = IOUtils.toString(inputStream, getEncoding());
         } catch (IOException e) {
             throw new DeserializationException(e.getMessage(), e);
         }
@@ -63,7 +63,6 @@ public interface Deserializer {
      * @throws DeserializationException
      */
     <T> T deserialize(String content, Type deserializedType) throws DeserializationException;
-
 
     /**
      * The encoding is used for {@link InputStream} when deserializing

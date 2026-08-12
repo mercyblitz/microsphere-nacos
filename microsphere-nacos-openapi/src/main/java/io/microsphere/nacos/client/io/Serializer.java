@@ -16,12 +16,13 @@
  */
 package io.microsphere.nacos.client.io;
 
-import java.io.ByteArrayOutputStream;
+import io.microsphere.io.FastByteArrayOutputStream;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
 
-import static io.microsphere.nacos.client.util.IOUtils.DEFAULT_BUFFER_SIZE;
+import static io.microsphere.io.IOUtils.DEFAULT_BUFFER_SIZE;
 
 /**
  * Serializer interface
@@ -51,8 +52,7 @@ public interface Serializer {
      */
     default String serializeAsString(Object object, String encoding) throws SerializationException {
         String content = null;
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
+        try (FastByteArrayOutputStream outputStream = new FastByteArrayOutputStream(DEFAULT_BUFFER_SIZE)) {
             serialize(object, outputStream);
             byte[] bytes = outputStream.toByteArray();
             content = new String(bytes, encoding);

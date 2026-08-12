@@ -18,7 +18,7 @@ package io.microsphere.nacos.client.common.model;
 
 import java.util.List;
 
-import static io.microsphere.nacos.client.util.CollectionUtils.size;
+import static io.microsphere.collection.CollectionUtils.size;
 import static java.util.Collections.emptyList;
 
 /**

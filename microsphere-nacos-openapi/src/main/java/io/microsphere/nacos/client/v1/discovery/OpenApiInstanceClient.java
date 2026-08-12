@@ -65,7 +65,7 @@ import static io.microsphere.nacos.client.util.ModelUtils.setPropertyIfAbsent;
 import static io.microsphere.nacos.client.util.OpenApiUtils.createBatchMetadataRequest;
 import static io.microsphere.nacos.client.util.OpenApiUtils.createRequestBuilder;
 import static io.microsphere.nacos.client.util.OpenApiUtils.executeAsMessageOK;
-import static io.microsphere.nacos.client.util.StringUtils.isBlank;
+import static io.microsphere.util.StringUtils.isBlank;
 
 /**
  * The {@link Service} {@link Instance} for <a href="https://nacos.io/en/docs/v1/open-api/#service-discovery">Open API V1 - Service Discovery</a>

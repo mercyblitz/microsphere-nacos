@@ -16,14 +16,6 @@
  */
 package io.microsphere.nacos.client.util;
 
-import org.junit.jupiter.api.Test;
-
-import static io.microsphere.nacos.client.util.StringUtils.EMPTY_STRING;
-import static io.microsphere.nacos.client.util.StringUtils.isBlank;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 /**
  * {@link StringUtils} Test
  *
@@ -31,20 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @see StringUtils
  * @since 1.0.0
  */
-public class StringUtilsTest {
+class StringUtilsTest {
 
-    @Test
-    public void testConstants() {
-        assertEquals("", EMPTY_STRING);
-    }
-
-    @Test
-    public void testIsBlank() {
-        assertTrue(isBlank(null));
-        assertTrue(isBlank(EMPTY_STRING));
-        assertTrue(isBlank(" "));
-        assertTrue(isBlank("  "));
-        assertTrue(isBlank("   "));
-        assertFalse(isBlank("___"));
-    }
 }

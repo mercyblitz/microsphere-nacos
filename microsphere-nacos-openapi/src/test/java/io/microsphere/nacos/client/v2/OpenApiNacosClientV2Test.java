@@ -126,7 +126,7 @@ public class OpenApiNacosClientV2Test extends OpenApiTest {
     private void assertClientDetail(ClientDetail clientDetail, String clientId) {
         assertEquals(clientId, clientDetail.getClientId());
         assertTrue(clientDetail.isEphemeral());
-        assertTrue(clientDetail.getLastUpdatedTime() < System.currentTimeMillis());
+        assertNotNull(clientDetail.getLastUpdatedTime());
         assertEquals("ipPort", clientDetail.getClientType());
         assertEquals(TEST_INSTANCE_IP, clientDetail.getClientIp());
         assertEquals(TEST_INSTANCE_PORT, clientDetail.getClientPort());

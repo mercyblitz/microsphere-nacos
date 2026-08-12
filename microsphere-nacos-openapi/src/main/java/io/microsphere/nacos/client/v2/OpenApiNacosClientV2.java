@@ -47,10 +47,6 @@ import io.microsphere.nacos.client.common.namespace.model.Namespace;
 import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiHttpClient;
 import io.microsphere.nacos.client.transport.OpenApiRequest;
-import io.microsphere.nacos.client.v1.config.OpenApiConfigClient;
-import io.microsphere.nacos.client.v1.discovery.OpenApiInstanceClient;
-import io.microsphere.nacos.client.v1.discovery.OpenApiServiceClient;
-import io.microsphere.nacos.client.v1.namespace.OpenApiNamespaceClient;
 import io.microsphere.nacos.client.v1.raft.OpenApiRaftClient;
 import io.microsphere.nacos.client.v1.raft.RaftClient;
 import io.microsphere.nacos.client.v1.server.OpenApiServerClient;
@@ -78,7 +74,7 @@ import static io.microsphere.nacos.client.transport.OpenApiRequestParam.INSTANCE
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.NAMESPACE_ID;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.SERVICE_GROUP_NAME;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.SERVICE_NAME;
-import static io.microsphere.nacos.client.util.TypeUtils.ofParameterizedType;
+import static io.microsphere.reflect.generics.ParameterizedTypeImpl.of;
 
 /**
  * {@link NacosClientV2} for Open API
@@ -570,13 +566,13 @@ public class OpenApiNacosClientV2 extends OpenApiTemplateClient implements Nacos
     @Override
     public List<ClientInstance> getRegisteredInstances(String clientId) {
         OpenApiRequest request = clientRequest(CLIENT_REGISTERED_INSTANCES_ENDPOINT, clientId);
-        return response(request, ofParameterizedType(List.class, ClientInstance.class));
+        return response(request, of(List.class, ClientInstance.class));
     }
 
     @Override
     public List<ClientSubscriber> getSubscribers(String clientId) {
         OpenApiRequest request = clientRequest(CLIENT_SUBSCRIBERS_ENDPOINT, clientId);
-        return response(request, ofParameterizedType(List.class, ClientSubscriber.class));
+        return response(request, of(List.class, ClientSubscriber.class));
     }
 
     @Override
@@ -602,7 +598,7 @@ public class OpenApiNacosClientV2 extends OpenApiTemplateClient implements Nacos
                 .queryParameter(INSTANCE_IP, ip)
                 .queryParameter(INSTANCE_PORT, port)
                 .build();
-        return response(request, ofParameterizedType(List.class, ClientInfo.class));
+        return response(request, of(List.class, ClientInfo.class));
     }
 
     private OpenApiRequest clientRequest(String endpoint, String clientId) {

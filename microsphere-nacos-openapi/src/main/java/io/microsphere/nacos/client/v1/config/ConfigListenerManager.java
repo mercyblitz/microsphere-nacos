@@ -48,6 +48,7 @@ import static io.microsphere.nacos.client.transport.OpenApiRequestParam.LISTENIN
 import static io.microsphere.nacos.client.v1.config.util.ConfigUtil.buildConfigId;
 import static io.microsphere.nacos.client.v1.config.util.ConfigUtil.buildListeningConfigDataPacket;
 import static java.lang.Runtime.getRuntime;
+import static java.lang.Thread.currentThread;
 import static java.util.concurrent.Executors.newSingleThreadExecutor;
 import static java.util.concurrent.Executors.newSingleThreadScheduledExecutor;
 
@@ -178,7 +179,7 @@ class ConfigListenerManager {
                         // Blocking if loadingConfigIds is empty
                         loadingConfigIds.wait();
                     } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
+                        currentThread().interrupt();
                     }
                 }
             }
@@ -364,7 +365,7 @@ class ConfigListenerManager {
             try {
                 future.get(eventProcessingTimeout, TimeUnit.MILLISECONDS);
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                currentThread().interrupt();
             } catch (ExecutionException e) {
                 throw new RuntimeException(e);
             } catch (TimeoutException e) {

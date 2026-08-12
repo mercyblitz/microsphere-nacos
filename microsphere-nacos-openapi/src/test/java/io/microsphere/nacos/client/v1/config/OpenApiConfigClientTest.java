@@ -70,7 +70,7 @@ public class OpenApiConfigClientTest extends OpenApiTest {
 
     public static final ConfigType CONFIG_TYPE = ConfigType.TEXT;
 
-    public static final int LONG_POLLING_TIMEOUT = 5000;
+    public static final int LONG_POLLING_TIMEOUT = 100;
 
     @Override
     protected void customize(NacosClientConfig nacosClientConfig) {
@@ -85,14 +85,14 @@ public class OpenApiConfigClientTest extends OpenApiTest {
     public void test() throws Exception {
         ConfigClient client = createConfigClient();
 
+        // Test deleteConfig()
+        assertTrue(client.deleteConfig(TEST_NAMESPACE_ID, TEST_GROUP_NAME, TEST_DATA_ID));
+
         AtomicReference<ConfigChangedEvent> eventRef = new AtomicReference<>();
         // Test
         client.addEventListener(TEST_NAMESPACE_ID, TEST_GROUP_NAME, TEST_DATA_ID, e -> {
             eventRef.set(e);
         });
-
-        // Test deleteConfig()
-        assertTrue(client.deleteConfig(TEST_NAMESPACE_ID, TEST_GROUP_NAME, TEST_DATA_ID));
 
         // Test getConfig()
         Config config = client.getConfig(TEST_NAMESPACE_ID, TEST_GROUP_NAME, TEST_DATA_ID);
@@ -104,7 +104,6 @@ public class OpenApiConfigClientTest extends OpenApiTest {
 
         awaitEvent(eventRef);
         assertConfigChangedEvent(eventRef, ConfigChangedEvent.Kind.CREATED, newConfig.getContent());
-
 
         // test publishConfigContent() to update the content
         String newContent = "New Content for testing...";
@@ -137,7 +136,6 @@ public class OpenApiConfigClientTest extends OpenApiTest {
         assertNotNull(historyConfig1.getMd5());
         assertNotNull(historyConfig1.getContent());
 
-
         config = client.getConfig(TEST_NAMESPACE_ID, TEST_GROUP_NAME, TEST_DATA_ID);
         String id = config.getId();
         assertConfig(config);
@@ -167,9 +165,9 @@ public class OpenApiConfigClientTest extends OpenApiTest {
         eventRef.set(null);
     }
 
-    private void awaitEvent(AtomicReference<ConfigChangedEvent> eventRef) throws InterruptedException {
+    private void awaitEvent(AtomicReference<ConfigChangedEvent> eventRef) {
         while (eventRef.get() == null) {
-            Thread.sleep(1000);
+            await(LONG_POLLING_TIMEOUT);
         }
     }
 
@@ -200,7 +198,7 @@ public class OpenApiConfigClientTest extends OpenApiTest {
         // FIXME: V1 and V2 compatibility
         // assertEquals(TEST_CONFIG_APP_NAME, config.getAppName());
         assertNotNull(config.getOperatorIp());
-        assertNull(config.getOperator());
+        assertNotNull(config.getOperator());
         assertNotNull(config.getCreatedTime());
         assertNotNull(config.getLastModifiedTime());
     }

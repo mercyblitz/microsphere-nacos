@@ -78,7 +78,7 @@ public class OpenApiInstanceClientTest extends OpenApiTest {
         DeleteInstance deleteInstance = new DeleteInstance();
         deleteInstance.from(instance);
         this.client.deregister(deleteInstance);
-        await(5);
+        await(500);
     }
 
     protected InstanceClient createInstanceClient() {
@@ -131,7 +131,7 @@ public class OpenApiInstanceClientTest extends OpenApiTest {
 
 
         // Test getInstance()
-        await(1);
+        await(100);
         QueryInstance queryInstance = new QueryInstance().from(instance);
         Instance exsitedInstance = client.getInstance(queryInstance);
         assertBaseInstance(exsitedInstance);
@@ -148,7 +148,7 @@ public class OpenApiInstanceClientTest extends OpenApiTest {
         UpdateInstance updateInstance = new UpdateInstance().from(instance);
         assertTrue(client.refresh(updateInstance));
 
-        await(1);
+        await(500);
         exsitedInstance = client.getInstance(queryInstance);
         assertEquals(updateInstance.getIp(), exsitedInstance.getIp());
         assertEquals(updateInstance.getPort(), exsitedInstance.getPort());
@@ -159,7 +159,7 @@ public class OpenApiInstanceClientTest extends OpenApiTest {
 
 
         // Test getInstancesList()
-        await(1);
+        await(500);
         InstancesList instancesList = client.getInstancesList(TEST_NAMESPACE_ID, TEST_GROUP_NAME, TEST_SERVICE_NAME);
         assertEquals(TEST_NAMESPACE_ID, instancesList.getNamespaceId());
         assertEquals(TEST_GROUP_NAME, instancesList.getGroupName());
@@ -194,17 +194,15 @@ public class OpenApiInstanceClientTest extends OpenApiTest {
         BatchMetadataResult result = client.batchUpdateMetadata(asList(exsitedInstance), metadata);
         assertFalse(result.getUpdated().isEmpty());
 
-        await(1);
+        await(1000);
         exsitedInstance = client.getInstance(queryInstance);
         Map<String, String> metadata1 = exsitedInstance.getMetadata();
         assertEquals("test-value", metadata1.get("test-key"));
         assertEquals("test-value-2", metadata1.get("test-key-2"));
 
-
         // Test batchDeleteMetadata()
         result = client.batchDeleteMetadata(asList(exsitedInstance), metadata);
         assertFalse(result.getUpdated().isEmpty());
-
 
         // Test deregister()
         DeleteInstance deleteInstance = new DeleteInstance().from(instance);

@@ -19,7 +19,7 @@ package io.microsphere.nacos.client.util;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static io.microsphere.nacos.client.util.CollectionUtils.size;
+import static io.microsphere.collection.CollectionUtils.size;
 
 /**
  * The utility class for {@link String}
@@ -28,40 +28,6 @@ import static io.microsphere.nacos.client.util.CollectionUtils.size;
  * @since 1.0.0
  */
 public abstract class StringUtils {
-
-    /**
-     * Empty {@link String}
-     */
-    public static final String EMPTY_STRING = "";
-
-    /**
-     * <p>Checks if a CharSequence is whitespace, empty ("") or null.</p>
-     *
-     * <pre>
-     * StringUtils.isBlank(null)      = true
-     * StringUtils.isBlank("")        = true
-     * StringUtils.isBlank(" ")       = true
-     * StringUtils.isBlank("bob")     = false
-     * StringUtils.isBlank("  bob  ") = false
-     * </pre>
-     *
-     * @param cs the CharSequence to check, may be null
-     * @return {@code true} if the CharSequence is null, empty or whitespace
-     * @since Apache Commons Lang 2.0
-     */
-    public static boolean isBlank(CharSequence cs) {
-        final int strLen;
-        if (cs == null || (strLen = cs.length()) == 0) {
-            return true;
-        }
-        for (int i = 0; i < strLen; i++) {
-            if (!Character.isWhitespace(cs.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
 
     /**
      * Convert a {@code Collection} into a delimited {@code String} (e.g., CSV).
