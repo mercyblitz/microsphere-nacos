@@ -69,26 +69,28 @@ public class AuthorizationManager implements AutoCloseable {
 
     private void refreshAuthentication() throws AuthorizationException {
         if (isAuthorizationEnabled()) {
+            Authentication authentication = null;
             try {
-                this.authentication = this.authenticationClient.authenticate();
+                authentication = this.authenticationClient.authenticate();
+                this.authentication = authentication;
             } catch (Throwable e) {
                 String errorMessage = "Failed to refresh Nacos Client Authentication";
                 throw new AuthorizationException(errorMessage, e);
             } finally {
-                scheduleRefresh();
+                scheduleRefresh(authentication);
             }
         }
     }
 
-    private void scheduleRefresh() {
-        this.authenticationRefresher.schedule(this::refreshAuthentication, getRefreshIntervalInSeconds(getAuthentication()), SECONDS);
+    private void scheduleRefresh(Authentication authentication) {
+        this.authenticationRefresher.schedule(this::refreshAuthentication, getRefreshIntervalInSeconds(authentication), SECONDS);
     }
 
     protected Authentication getAuthentication() {
         return this.isAuthorizationEnabled() ? this.authentication : null;
     }
 
-    private long getRefreshIntervalInSeconds(Authentication authentication) {
+    protected long getRefreshIntervalInSeconds(Authentication authentication) {
         long tokenTtlInSeconds = authentication == null ? 60 : authentication.getTokenTtl();
         return tokenTtlInSeconds / 2;
     }
@@ -99,7 +101,7 @@ public class AuthorizationManager implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() {
         ScheduledExecutorService authenticationRefresher = this.authenticationRefresher;
         if (authenticationRefresher != null) {
             this.authenticationRefresher.shutdown();
