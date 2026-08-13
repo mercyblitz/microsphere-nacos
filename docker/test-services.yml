@@ -27,3 +27,12 @@ services:
       - "28080:8080"
       - "28848:8848"
       - "29848:9848"
+
+  init-app:
+    image: curlimages/curl:latest
+    command: >
+      curl --retry 10 --retry-delay 5 --retry-connrefused
+      -X POST 'http://nacos-server-v2:8848/nacos/v1/auth/users/admin'
+      -d 'password=nacos'
+    depends_on:
+      - nacos-server-v2
