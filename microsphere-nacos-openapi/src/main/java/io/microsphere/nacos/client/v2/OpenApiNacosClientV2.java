@@ -67,6 +67,7 @@ import java.util.Map;
 import static io.microsphere.nacos.client.OpenApiVersion.V2;
 import static io.microsphere.nacos.client.common.discovery.ConsistencyType.EPHEMERAL;
 import static io.microsphere.nacos.client.http.HttpMethod.GET;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CLIENT_ID;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.INSTANCE_EPHEMERAL;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.INSTANCE_IP;
@@ -551,7 +552,7 @@ public class OpenApiNacosClientV2 extends OpenApiTemplateClient implements Nacos
 
     @Override
     public List<String> getAllClientIds() {
-        OpenApiRequest request = OpenApiRequest.Builder.create(CLIENT_LIST_ENDPOINT)
+        OpenApiRequest request = create(CLIENT_LIST_ENDPOINT)
                 .method(GET)
                 .build();
         return response(request, LinkedList.class);
@@ -589,7 +590,7 @@ public class OpenApiNacosClientV2 extends OpenApiTemplateClient implements Nacos
 
     private List<ClientInfo> getClients(String endpoint, String namespaceId, String groupName, String serviceName,
                                         ConsistencyType consistencyType, String ip, Integer port) {
-        OpenApiRequest request = OpenApiRequest.Builder.create(endpoint)
+        OpenApiRequest request = create(endpoint)
                 .method(GET)
                 .queryParameter(NAMESPACE_ID, namespaceId)
                 .queryParameter(SERVICE_GROUP_NAME, groupName)
@@ -602,7 +603,7 @@ public class OpenApiNacosClientV2 extends OpenApiTemplateClient implements Nacos
     }
 
     private OpenApiRequest clientRequest(String endpoint, String clientId) {
-        return OpenApiRequest.Builder.create(endpoint)
+        return create(endpoint)
                 .method(GET)
                 .queryParameter(CLIENT_ID, clientId)
                 .build();

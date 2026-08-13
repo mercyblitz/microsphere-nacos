@@ -35,6 +35,7 @@ import io.microsphere.nacos.client.common.discovery.model.UpdateInstance;
 import io.microsphere.nacos.client.http.HttpMethod;
 import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiRequest;
+import io.microsphere.nacos.client.transport.OpenApiRequest.Builder;
 import io.microsphere.nacos.client.transport.OpenApiRequestParam;
 import io.microsphere.nacos.client.util.ModelUtils;
 
@@ -44,6 +45,7 @@ import static io.microsphere.nacos.client.http.HttpMethod.DELETE;
 import static io.microsphere.nacos.client.http.HttpMethod.GET;
 import static io.microsphere.nacos.client.http.HttpMethod.POST;
 import static io.microsphere.nacos.client.http.HttpMethod.PUT;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.APP;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CLUSTERS;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CLUSTER_NAME;
@@ -123,7 +125,7 @@ public class OpenApiInstanceClient extends OpenApiTemplateClient implements Inst
 
         OpenApiRequestParam clusterParam = isOpenApiV1() ? CLUSTERS : CLUSTER_NAME;
 
-        OpenApiRequest request = OpenApiRequest.Builder.create(getInstancesListEndpoint())
+        OpenApiRequest request = create(getInstancesListEndpoint())
                 .method(HttpMethod.GET)
                 .queryParameter(NAMESPACE_ID, namespaceId)
                 .queryParameter(SERVICE_GROUP_NAME, groupName)
@@ -191,12 +193,12 @@ public class OpenApiInstanceClient extends OpenApiTemplateClient implements Inst
                 .build();
     }
 
-    private OpenApiRequest.Builder instanceRequestBuilder(NewInstance instance, HttpMethod method) {
+    private Builder instanceRequestBuilder(NewInstance instance, HttpMethod method) {
         return instanceRequestBuilder((GenericInstance) instance, method)
                 .queryParameter(INSTANCE_HEALTHY, instance.getHealthy());
     }
 
-    protected OpenApiRequest.Builder instanceRequestBuilder(GenericInstance instance, HttpMethod method) {
+    protected Builder instanceRequestBuilder(GenericInstance instance, HttpMethod method) {
         return instanceRequestBuilder((BaseInstance) instance, method)
                 .queryParameter(INSTANCE_WEIGHT, instance.getWeight())
                 .queryParameter(INSTANCE_ENABLED, instance.getEnabled())
@@ -204,7 +206,7 @@ public class OpenApiInstanceClient extends OpenApiTemplateClient implements Inst
                 .queryParameter(METADATA, instance.getMetadata());
     }
 
-    protected OpenApiRequest.Builder instanceRequestBuilder(BaseInstance instance, HttpMethod method) {
+    protected Builder instanceRequestBuilder(BaseInstance instance, HttpMethod method) {
         return createRequestBuilder(getInstanceEndpoint(), method, instance);
     }
 

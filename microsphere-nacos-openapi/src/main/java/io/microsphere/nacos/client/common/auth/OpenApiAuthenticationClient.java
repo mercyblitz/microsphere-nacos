@@ -23,6 +23,7 @@ import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiRequest;
 
 import static io.microsphere.nacos.client.http.HttpMethod.POST;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.PASSWORD;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.USER_NAME;
 
@@ -41,7 +42,7 @@ public class OpenApiAuthenticationClient extends OpenApiTemplateClient implement
 
     @Override
     public Authentication authenticate(String userName, String password) {
-        OpenApiRequest request = OpenApiRequest.Builder.create("/v1/auth/login")
+        OpenApiRequest request = create("/v1/auth/login")
                 .method(POST)
                 .queryParameter(USER_NAME, userName)
                 .queryParameter(PASSWORD, password)

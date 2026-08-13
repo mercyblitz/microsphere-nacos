@@ -22,6 +22,7 @@ import io.microsphere.nacos.client.common.discovery.model.Instance;
 import io.microsphere.nacos.client.http.HttpMethod;
 import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiRequest;
+import io.microsphere.nacos.client.transport.OpenApiRequest.Builder;
 import io.microsphere.nacos.client.transport.OpenApiResponse;
 
 import java.util.HashMap;
@@ -33,6 +34,7 @@ import java.util.Set;
 
 import static io.microsphere.nacos.client.common.discovery.ConsistencyType.EPHEMERAL;
 import static io.microsphere.nacos.client.constants.Constants.DEFAULT_CLUSTER_NAME;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CLUSTER_NAME;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CONSISTENCY_TYPE;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.INSTANCES;
@@ -86,15 +88,15 @@ public abstract class OpenApiUtils {
     }
 
     /**
-     * Create the {@link OpenApiRequest.Builder} for {@link BaseInstance Nacos Service Instance}
+     * Create the {@link Builder} for {@link BaseInstance Nacos Service Instance}
      *
      * @param endpoint the endpoint of {@link BaseInstance Nacos Service Instance}
      * @param method   {@link HttpMethod}
      * @param instance {@link BaseInstance Nacos Service Instance}
-     * @return {@link OpenApiRequest.Builder}
+     * @return {@link Builder}
      */
-    public static OpenApiRequest.Builder createRequestBuilder(String endpoint, HttpMethod method, BaseInstance instance) {
-        return OpenApiRequest.Builder.create(endpoint)
+    public static Builder createRequestBuilder(String endpoint, HttpMethod method, BaseInstance instance) {
+        return create(endpoint)
                 .method(method)
                 .queryParameter(NAMESPACE_ID, instance.getNamespaceId())
                 .queryParameter(SERVICE_GROUP_NAME, instance.getGroupName())
@@ -106,7 +108,7 @@ public abstract class OpenApiUtils {
 
     public static OpenApiRequest createBatchMetadataRequest(Iterable<Instance> instances, Map<String, String> metadata,
                                                             ConsistencyType consistencyType, String endpoint, HttpMethod method) {
-        OpenApiRequest.Builder requestBuilder = OpenApiRequest.Builder.create(endpoint)
+        Builder requestBuilder = create(endpoint)
                 .method(method);
 
         Set<String> namespaceIds = new HashSet<>(2);

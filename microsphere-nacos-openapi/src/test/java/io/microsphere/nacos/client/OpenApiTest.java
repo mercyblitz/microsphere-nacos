@@ -18,13 +18,19 @@ package io.microsphere.nacos.client;
 
 import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiHttpClient;
+import io.microsphere.nacos.client.transport.OpenApiRequest;
+import io.microsphere.nacos.client.transport.OpenApiRequestParam;
+import io.microsphere.nacos.client.transport.OpenApiResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 import static io.microsphere.lang.function.ThrowableAction.execute;
+import static io.microsphere.nacos.client.http.HttpMethod.POST;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static java.lang.String.format;
 import static java.lang.System.getenv;
 import static java.lang.Thread.sleep;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Abstract Test class for Open API
@@ -50,6 +56,12 @@ public abstract class OpenApiTest {
 
     protected static final String PASSWORD = "nacos";
 
+    protected final boolean isV2API;
+
+    protected OpenApiTest() {
+        this.isV2API = this.getClass().getName().contains(".v2.");
+    }
+
     protected OpenApiClient openApiClient;
 
     protected NacosClientConfig nacosClientConfig;
@@ -59,7 +71,7 @@ public abstract class OpenApiTest {
         String serverAddress = System.getProperty(key, getenv(key));
         if (serverAddress == null) {
             String testClassName = this.getClass().getName();
-            if (testClassName.contains(".v2.")) {
+            if (isV2API) {
                 serverAddress = NACOS_V2_SERVER_ADDRESS;
             } else {
                 serverAddress = NACOS_V1_SERVER_ADDRESS;
@@ -83,7 +95,19 @@ public abstract class OpenApiTest {
         this.openApiClient = new OpenApiHttpClient(config);
         this.nacosClientConfig = config;
 
+        if (isV2API) {
+            initNacosUserPassword();
+        }
         setup();
+    }
+
+    protected void initNacosUserPassword() {
+        OpenApiRequest request = create("/v1/auth/users/admin")
+                .method(POST)
+                .queryParameter(OpenApiRequestParam.PASSWORD, PASSWORD)
+                .build();
+        OpenApiResponse execute = this.openApiClient.execute(request);
+        assertNotNull(execute);
     }
 
     /**

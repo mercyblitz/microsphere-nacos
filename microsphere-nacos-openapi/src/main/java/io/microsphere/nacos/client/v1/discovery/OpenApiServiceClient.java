@@ -32,6 +32,7 @@ import static io.microsphere.nacos.client.http.HttpMethod.DELETE;
 import static io.microsphere.nacos.client.http.HttpMethod.GET;
 import static io.microsphere.nacos.client.http.HttpMethod.POST;
 import static io.microsphere.nacos.client.http.HttpMethod.PUT;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.METADATA;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.NAMESPACE_ID;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.PAGE_NUMBER;
@@ -93,7 +94,7 @@ public class OpenApiServiceClient extends OpenApiTemplateClient implements Servi
 
     @Override
     public Page<String> getServiceNames(String namespaceId, String groupName, int pageNumber, int pageSize) {
-        OpenApiRequest request = OpenApiRequest.Builder.create(getServicesListEndpoint())
+        OpenApiRequest request = create(getServicesListEndpoint())
                 .queryParameter(NAMESPACE_ID, namespaceId)
                 .queryParameter(SERVICE_GROUP_NAME, groupName)
                 .queryParameter(PAGE_NUMBER, pageNumber)
@@ -107,7 +108,7 @@ public class OpenApiServiceClient extends OpenApiTemplateClient implements Servi
 
 
     private OpenApiRequest buildServiceRequest(String namespaceId, String groupName, String serviceName, HttpMethod method) {
-        OpenApiRequest request = OpenApiRequest.Builder.create(getServiceEndpoint())
+        OpenApiRequest request = create(getServiceEndpoint())
                 .method(method)
                 .queryParameter(NAMESPACE_ID, namespaceId)
                 .queryParameter(SERVICE_GROUP_NAME, groupName)
@@ -117,7 +118,7 @@ public class OpenApiServiceClient extends OpenApiTemplateClient implements Servi
     }
 
     private OpenApiRequest buildServiceRequest(Service service, HttpMethod method) {
-        return OpenApiRequest.Builder.create(getServiceEndpoint())
+        return create(getServiceEndpoint())
                 .method(method)
                 .queryParameter(NAMESPACE_ID, service.getNamespaceId())
                 .queryParameter(SERVICE_GROUP_NAME, service.getGroupName())

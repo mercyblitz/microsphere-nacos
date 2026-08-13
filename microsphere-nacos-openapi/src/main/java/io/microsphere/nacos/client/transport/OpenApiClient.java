@@ -19,12 +19,10 @@ package io.microsphere.nacos.client.transport;
 import io.microsphere.nacos.client.common.model.Result;
 import io.microsphere.nacos.client.io.Deserializer;
 import io.microsphere.nacos.client.io.Serializer;
-import io.microsphere.reflect.generics.ParameterizedTypeImpl;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-import static io.microsphere.reflect.JavaType.from;
 import static io.microsphere.reflect.generics.ParameterizedTypeImpl.of;
 
 /**

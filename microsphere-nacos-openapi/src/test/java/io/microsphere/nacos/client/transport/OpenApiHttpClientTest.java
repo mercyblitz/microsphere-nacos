@@ -17,11 +17,13 @@
 package io.microsphere.nacos.client.transport;
 
 import io.microsphere.nacos.client.OpenApiTest;
+import io.microsphere.nacos.client.transport.OpenApiRequest.Builder;
 import io.microsphere.nacos.client.v1.server.model.ServerState;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -37,7 +39,7 @@ public class OpenApiHttpClientTest extends OpenApiTest {
     @Test
     public void testExecute() throws IOException {
 
-        OpenApiRequest.Builder builder = OpenApiRequest.Builder.create("/v1/console/server/state");
+        Builder builder = create("/v1/console/server/state");
         OpenApiRequest request = builder.build();
 
         OpenApiResponse response = openApiClient.execute(request);
@@ -49,7 +51,7 @@ public class OpenApiHttpClientTest extends OpenApiTest {
 
     @Test
     public void testExecuteForPayload() throws IOException {
-        OpenApiRequest.Builder builder = OpenApiRequest.Builder.create("/v1/console/server/state");
+        Builder builder = create("/v1/console/server/state");
         OpenApiRequest request = builder.build();
 
         ServerState serverState = openApiClient.execute(request, ServerState.class);

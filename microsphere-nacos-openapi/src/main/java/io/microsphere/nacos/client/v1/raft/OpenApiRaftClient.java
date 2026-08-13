@@ -22,6 +22,8 @@ import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiRequest;
 import io.microsphere.nacos.client.v1.raft.model.RaftModel;
 
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
+
 /**
  * The {@link RaftClient} for Open API
  *
@@ -37,7 +39,7 @@ public class OpenApiRaftClient extends OpenApiTemplateClient implements RaftClie
 
     @Override
     public RaftModel getRaftModel() {
-        OpenApiRequest request = OpenApiRequest.Builder.create("/v1/ns/raft/leader")
+        OpenApiRequest request = create("/v1/ns/raft/leader")
                 .build();
         return this.openApiClient.execute(request, RaftModel.class);
     }

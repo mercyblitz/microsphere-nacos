@@ -29,11 +29,13 @@ import io.microsphere.nacos.client.common.model.Page;
 import io.microsphere.nacos.client.http.HttpMethod;
 import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiRequest;
+import io.microsphere.nacos.client.transport.OpenApiRequest.Builder;
 
 import static io.microsphere.nacos.client.constants.Constants.SEARCH_PARAM_VALUE;
 import static io.microsphere.nacos.client.http.HttpMethod.DELETE;
 import static io.microsphere.nacos.client.http.HttpMethod.GET;
 import static io.microsphere.nacos.client.http.HttpMethod.POST;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CONFIG_APP;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CONFIG_CONTENT;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CONFIG_DATA_ID;
@@ -180,21 +182,20 @@ public class OpenApiConfigClient extends OpenApiTemplateClient implements Config
                 .build();
     }
 
-    protected OpenApiRequest.Builder configRequestBuilder(String namespaceId, String group, String dataId, String tag, HttpMethod method) {
+    protected Builder configRequestBuilder(String namespaceId, String group, String dataId, String tag, HttpMethod method) {
         return requestBuilder(getConfigEndpoint(), namespaceId, group, dataId, tag, method);
     }
 
-    protected OpenApiRequest.Builder requestBuilder(String endpoint, String namespaceId, String group, String dataId, HttpMethod method) {
+    protected Builder requestBuilder(String endpoint, String namespaceId, String group, String dataId, HttpMethod method) {
         return requestBuilder(endpoint, namespaceId, group, dataId, null, method);
     }
 
-    protected OpenApiRequest.Builder requestBuilder(String endpoint, String namespaceId, String group, String dataId, String tag, HttpMethod method) {
-        return OpenApiRequest.Builder.create(endpoint).method(method)
+    protected Builder requestBuilder(String endpoint, String namespaceId, String group, String dataId, String tag, HttpMethod method) {
+        return create(endpoint).method(method)
                 .queryParameter(CONFIG_TENANT, namespaceId)
                 .queryParameter(CONFIG_GROUP, group)
                 .queryParameter(CONFIG_DATA_ID, dataId)
-                .queryParameter(CONFIG_TAG, tag)
-                ;
+                .queryParameter(CONFIG_TAG, tag);
     }
 
     protected String getConfigEndpoint() {

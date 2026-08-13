@@ -32,6 +32,7 @@ import static io.microsphere.nacos.client.http.HttpMethod.DELETE;
 import static io.microsphere.nacos.client.http.HttpMethod.GET;
 import static io.microsphere.nacos.client.http.HttpMethod.POST;
 import static io.microsphere.nacos.client.http.HttpMethod.PUT;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.NAMESPACE_DESCRIPTION;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.NAMESPACE_ID;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.NAMESPACE_NAME;
@@ -55,7 +56,7 @@ public class OpenApiNamespaceClientV2 extends OpenApiTemplateClient implements N
 
     @Override
     public List<Namespace> getAllNamespaces() {
-        OpenApiRequest request = OpenApiRequest.Builder.create(NAMESPACES_LIST_ENDPOINT_V2)
+        OpenApiRequest request = create(NAMESPACES_LIST_ENDPOINT_V2)
                 .build();
         NamespacesList namespacesList = this.openApiClient.execute(request, NamespacesList.class);
         return namespacesList.getData();
@@ -100,7 +101,7 @@ public class OpenApiNamespaceClientV2 extends OpenApiTemplateClient implements N
     }
 
     private OpenApiRequest buildNamespaceRequest(HttpMethod method, String namespaceId, String namespaceName, String namespaceDesc) {
-        return OpenApiRequest.Builder.create(NAMESPACE_ENDPOINT_V2)
+        return create(NAMESPACE_ENDPOINT_V2)
                 .method(method)
                 .queryParameter(NAMESPACE_ID, namespaceId)
                 .queryParameter(NAMESPACE_NAME, namespaceName)

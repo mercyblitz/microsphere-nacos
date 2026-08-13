@@ -43,6 +43,7 @@ import static io.microsphere.nacos.client.common.config.event.ConfigChangedEvent
 import static io.microsphere.nacos.client.common.config.event.ConfigChangedEvent.ofModified;
 import static io.microsphere.nacos.client.constants.Constants.LISTENING_CONFIG_SEPARATOR;
 import static io.microsphere.nacos.client.http.HttpMethod.POST;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestHeader.LONG_PULLING_TIMEOUT;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.LISTENING_CONFIGS;
 import static io.microsphere.nacos.client.v1.config.util.ConfigUtil.buildConfigId;
@@ -235,7 +236,7 @@ class ConfigListenerManager {
 
         if (listeningConfigs != null) {
             int longPollingTimeout = this.nacosClientConfig.getLongPollingTimeout();
-            OpenApiRequest request = OpenApiRequest.Builder.create(LISTENER_ENDPOINT)
+            OpenApiRequest request = create(LISTENER_ENDPOINT)
                     .method(POST)
                     .queryParameter(LISTENING_CONFIGS, listeningConfigs)
                     .header(LONG_PULLING_TIMEOUT, longPollingTimeout)

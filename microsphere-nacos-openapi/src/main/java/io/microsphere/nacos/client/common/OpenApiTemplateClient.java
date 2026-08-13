@@ -23,10 +23,10 @@ import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiRequest;
 
 import java.lang.reflect.Type;
-import java.util.Objects;
 
 import static io.microsphere.nacos.client.OpenApiVersion.V1;
 import static io.microsphere.nacos.client.OpenApiVersion.V2;
+import static java.util.Objects.requireNonNull;
 
 /**
  * The abstract template class of {@link OpenApiClient} is extended by Client implementations
@@ -41,7 +41,7 @@ public abstract class OpenApiTemplateClient extends AbstractClient {
 
     protected OpenApiTemplateClient(OpenApiClient openApiClient, NacosClientConfig nacosClientConfig) {
         super(nacosClientConfig);
-        Objects.requireNonNull(openApiClient, "The 'openApiClient' argument must not be null!");
+        requireNonNull(openApiClient, "The 'openApiClient' argument must not be null!");
         this.openApiClient = openApiClient;
     }
 

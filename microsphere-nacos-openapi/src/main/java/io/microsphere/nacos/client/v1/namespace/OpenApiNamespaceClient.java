@@ -28,6 +28,7 @@ import io.microsphere.nacos.client.transport.OpenApiRequest;
 
 import java.util.List;
 
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CUSTOM_NAMESPACE_ID;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.NAMESPACE;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.NAMESPACE_DESCRIPTION;
@@ -53,7 +54,7 @@ public class OpenApiNamespaceClient extends OpenApiTemplateClient implements Nam
 
     @Override
     public List<Namespace> getAllNamespaces() {
-        OpenApiRequest request = OpenApiRequest.Builder.create(NAMESPACES_ENDPOINT)
+        OpenApiRequest request = create(NAMESPACES_ENDPOINT)
                 .build();
         NamespacesList namespacesList = this.openApiClient.execute(request, NamespacesList.class);
         return namespacesList.getData();
@@ -61,7 +62,7 @@ public class OpenApiNamespaceClient extends OpenApiTemplateClient implements Nam
 
     @Override
     public Namespace getNamespace(String namespaceId) {
-        OpenApiRequest request = OpenApiRequest.Builder.create(NAMESPACES_ENDPOINT)
+        OpenApiRequest request = create(NAMESPACES_ENDPOINT)
                 .queryParameter(NAMESPACE_ID, namespaceId)
                 .queryParameter(SHOW, "all")
                 .build();
@@ -76,7 +77,7 @@ public class OpenApiNamespaceClient extends OpenApiTemplateClient implements Nam
 
     @Override
     public boolean createNamespace(String namespaceId, String namespaceName, String namespaceDesc) {
-        OpenApiRequest request = OpenApiRequest.Builder.create(NAMESPACES_ENDPOINT)
+        OpenApiRequest request = create(NAMESPACES_ENDPOINT)
                 .method(HttpMethod.POST)
                 .queryParameter(CUSTOM_NAMESPACE_ID, namespaceId)
                 .queryParameter(NAMESPACE_NAME, namespaceName)
@@ -87,7 +88,7 @@ public class OpenApiNamespaceClient extends OpenApiTemplateClient implements Nam
 
     @Override
     public boolean updateNamespace(String namespaceId, String namespaceName, String namespaceDesc) {
-        OpenApiRequest request = OpenApiRequest.Builder.create(NAMESPACES_ENDPOINT)
+        OpenApiRequest request = create(NAMESPACES_ENDPOINT)
                 .method(HttpMethod.PUT)
                 .queryParameter(NAMESPACE, namespaceId)
                 .queryParameter(NAMESPACE_SHOW_NAME, namespaceName)
@@ -98,7 +99,7 @@ public class OpenApiNamespaceClient extends OpenApiTemplateClient implements Nam
 
     @Override
     public boolean deleteNamespace(String namespaceId) {
-        OpenApiRequest request = OpenApiRequest.Builder.create(NAMESPACES_ENDPOINT)
+        OpenApiRequest request = create(NAMESPACES_ENDPOINT)
                 .method(HttpMethod.DELETE)
                 .queryParameter(NAMESPACE_ID, namespaceId)
                 .build();

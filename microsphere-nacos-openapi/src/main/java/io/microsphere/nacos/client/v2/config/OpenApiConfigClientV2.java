@@ -25,12 +25,14 @@ import io.microsphere.nacos.client.common.config.model.NewConfig;
 import io.microsphere.nacos.client.http.HttpMethod;
 import io.microsphere.nacos.client.transport.OpenApiClient;
 import io.microsphere.nacos.client.transport.OpenApiRequest;
+import io.microsphere.nacos.client.transport.OpenApiRequest.Builder;
 import io.microsphere.nacos.client.v1.config.OpenApiConfigClient;
 
 import static io.microsphere.nacos.client.OpenApiVersion.V1;
 import static io.microsphere.nacos.client.OpenApiVersion.V2;
 import static io.microsphere.nacos.client.http.HttpMethod.GET;
 import static io.microsphere.nacos.client.http.HttpMethod.POST;
+import static io.microsphere.nacos.client.transport.OpenApiRequest.Builder.create;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CONFIG_APP;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CONFIG_CONTENT;
 import static io.microsphere.nacos.client.transport.OpenApiRequestParam.CONFIG_DATA_ID;
@@ -75,7 +77,7 @@ public class OpenApiConfigClientV2 extends OpenApiConfigClient implements Config
     public Config getConfig(String namespaceId, String group, String dataId) {
         // No getConfig endpoint is not found in Open API V2
         String configEndpoint = V1.getEndpointPath() + CONFIG_ENDPOINT;
-        OpenApiRequest request = OpenApiRequest.Builder.create(configEndpoint)
+        OpenApiRequest request = create(configEndpoint)
                 .method(GET)
                 .queryParameter(CONFIG_TENANT, namespaceId)
                 .queryParameter(CONFIG_GROUP, group)
@@ -128,9 +130,9 @@ public class OpenApiConfigClientV2 extends OpenApiConfigClient implements Config
     }
 
     @Override
-    protected OpenApiRequest.Builder requestBuilder(String endpoint, String namespaceId, String group, String dataId,
-                                                    String tag, HttpMethod method) {
-        return OpenApiRequest.Builder.create(endpoint).method(method)
+    protected Builder requestBuilder(String endpoint, String namespaceId, String group, String dataId,
+                                     String tag, HttpMethod method) {
+        return create(endpoint).method(method)
                 .queryParameter(NAMESPACE_ID, namespaceId)
                 .queryParameter(CONFIG_GROUP, group)
                 .queryParameter(CONFIG_DATA_ID, dataId)
